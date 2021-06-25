@@ -10,14 +10,13 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseLayout = void 0;
 var LS;
 (function (LS) {
     LS[LS["START"] = 1] = "START";
@@ -86,17 +85,17 @@ function tokenizer(state, next) {
         else if (commaIdx === length - 1) {
             var keycode = tnext.slice(0, length - 1);
             var layout1D = res.layout1D;
-            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_START, res: __assign(__assign({}, res), { layout1D: __spreadArrays(layout1D, [keycode]) }) });
+            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_START, res: __assign(__assign({}, res), { layout1D: __spreadArray(__spreadArray([], layout1D), [keycode]) }) });
         }
         else if (parenIdx === length - 1) {
             var keycode = tnext.slice(0, length - 1);
             var layout1D = res.layout1D;
-            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_END, res: __assign(__assign({}, res), { layout1D: __spreadArrays(layout1D, [keycode]), layout2D: [[]] }) });
+            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_END, res: __assign(__assign({}, res), { layout1D: __spreadArray(__spreadArray([], layout1D), [keycode]), layout2D: [[]] }) });
         }
         else if (parenIdx === -1 && commaIdx === -1) {
             var keycode = tnext;
             var layout1D = res.layout1D;
-            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_START, res: __assign(__assign({}, res), { layout1D: __spreadArrays(layout1D, [keycode]), layout2D: [[]] }) });
+            return __assign(__assign({}, state), { prev: LS.LAYOUT1D_START, res: __assign(__assign({}, res), { layout1D: __spreadArray(__spreadArray([], layout1D), [keycode]), layout2D: [[]] }) });
         }
     }
     else if (prev === LS.LAYOUT1D_END) {
@@ -117,7 +116,7 @@ function tokenizer(state, next) {
             return __assign(__assign({}, state), { prev: LS.SKIP });
         }
         else if (tnext[0] === '{') {
-            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_START, res: __assign(__assign({}, res), { layout2D: __spreadArrays(res.layout2D, [[]]) }) }), tnext.slice(1));
+            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_START, res: __assign(__assign({}, res), { layout2D: __spreadArray(__spreadArray([], res.layout2D), [[]]) }) }), tnext.slice(1));
         }
     }
     else if (prev === LS.LAYOUT2D_COL_START) {
@@ -128,24 +127,24 @@ function tokenizer(state, next) {
         }
         if (bracketIdx === 0) {
             var layout2D = res.layout2D;
-            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_END, res: __assign(__assign({}, res), { layout2D: __spreadArrays(layout2D) }) }), tnext.slice(bracketIdx + 1));
+            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_END, res: __assign(__assign({}, res), { layout2D: __spreadArray([], layout2D) }) }), tnext.slice(bracketIdx + 1));
         }
         else if (bracketIdx > 0) {
             var layout2D = res.layout2D;
             var lastRow = layout2D[layout2D.length - 1];
-            layout2D[layout2D.length - 1] = __spreadArrays(lastRow, [tnext.slice(0, bracketIdx)]);
-            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_END, res: __assign(__assign({}, res), { layout2D: __spreadArrays(layout2D) }) }), tnext.slice(bracketIdx + 1));
+            layout2D[layout2D.length - 1] = __spreadArray(__spreadArray([], lastRow), [tnext.slice(0, bracketIdx)]);
+            return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_END, res: __assign(__assign({}, res), { layout2D: __spreadArray([], layout2D) }) }), tnext.slice(bracketIdx + 1));
         }
         else if (commaIdx !== -1) {
             var layout2D = res.layout2D;
             var lastRow = layout2D[layout2D.length - 1];
-            layout2D[layout2D.length - 1] = __spreadArrays(lastRow, [tnext.slice(0, commaIdx)]);
+            layout2D[layout2D.length - 1] = __spreadArray(__spreadArray([], lastRow), [tnext.slice(0, commaIdx)]);
             return tokenizer(__assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_START, res: __assign(__assign({}, res), { layout2D: layout2D }) }), tnext.slice(commaIdx));
         }
         else if (bracketIdx === -1 && commaIdx === -1) {
             var layout2D = res.layout2D;
             var lastRow = layout2D[layout2D.length - 1];
-            layout2D[layout2D.length - 1] = __spreadArrays(lastRow, [tnext]);
+            layout2D[layout2D.length - 1] = __spreadArray(__spreadArray([], lastRow), [tnext]);
             return __assign(__assign({}, state), { prev: LS.LAYOUT2D_COL_START, res: __assign(__assign({}, res), { layout2D: layout2D }) });
         }
     }
@@ -160,8 +159,8 @@ function parseLayout(layout) {
     }).res;
     var layout1D = res.layout1D, layout2D = res.layout2D, name = res.name;
     var _a = [layout2D.length, layout2D[0].length], rows = _a[0], cols = _a[1];
-    var indexMap = Object.assign.apply(Object, __spreadArrays([{}], layout2D.map(function (arr, i) {
-        return Object.assign.apply(Object, __spreadArrays([{}], arr.map(function (val, j) {
+    var indexMap = Object.assign.apply(Object, __spreadArray([{}], layout2D.map(function (arr, i) {
+        return Object.assign.apply(Object, __spreadArray([{}], arr.map(function (val, j) {
             var _a;
             return (_a = {},
                 _a[val] = { col: j, row: i },

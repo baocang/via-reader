@@ -25,6 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateVIADefinitionV2LookupMap = exports.generateVIADefinitionLookupMap = exports.keyboardDefinitionToVIADefinition = exports.getLightingDefinition = exports.keyboardDefinitionV2ToVIADefinitionV2 = exports.validateKeyBounds = exports.validateLayouts = exports.getVendorProductId = void 0;
 var kle_parser_1 = require("./kle-parser");
 var keyboard_definition_validator_1 = __importDefault(require("./validated-types/keyboard-definition.validator"));
 var keyboard_definition_v2_validator_1 = __importDefault(require("./validated-types/keyboard-definition-v2.validator"));

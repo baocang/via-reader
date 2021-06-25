@@ -21,14 +21,13 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.kleLayoutToVIALayout = exports.extractGroups = exports.findPivot = exports.filterGroups = exports.rawKLEToKLELayout = void 0;
 var invariant = require('invariant');
 var util = require('util');
 var types_1 = require("./types");
@@ -50,7 +49,7 @@ function filterGroups(keys) {
 exports.filterGroups = filterGroups;
 // Finds the closest to the top-left corner
 function findPivot(keys) {
-    return __spreadArrays(keys).sort(function (a, b) {
+    return __spreadArray([], keys).sort(function (a, b) {
         var yDiff = a.y - b.y;
         return yDiff !== 0 ? yDiff : a.x - b.x;
     })[0];
@@ -79,7 +78,7 @@ function getBoundingBox(key) {
         { x: box.xEnd, y: box.yStart },
         { x: box.xStart, y: box.yEnd },
         { x: box.xEnd, y: box.yEnd }
-    ].map(function (p) { return applyRotation.apply(void 0, __spreadArrays([p.x, p.y], extraArgs)); });
+    ].map(function (p) { return applyRotation.apply(void 0, __spreadArray([p.x, p.y], extraArgs)); });
     return {
         xStart: Math.min.apply(Math, rotatedPoints.map(function (p) { return p.x; })),
         xEnd: Math.max.apply(Math, rotatedPoints.map(function (p) { return p.x; })),
@@ -225,7 +224,7 @@ function kleLayoutToVIALayout(kle) {
                     colorCount: newColorCount,
                     t: t,
                     cursor: { x: x + w, y: y },
-                    res: __spreadArrays(res, [currKey])
+                    res: __spreadArray(__spreadArray([], res), [currKey])
                 };
             }
             return {
@@ -252,7 +251,7 @@ function kleLayoutToVIALayout(kle) {
                 rx: parsedRow.rx,
                 ry: parsedRow.ry
             },
-            res: __spreadArrays(prev.res, [parsedRow.res])
+            res: __spreadArray(__spreadArray([], prev.res), [parsedRow.res])
         };
     }, {
         cursor: { x: 0, y: 0 },

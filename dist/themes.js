@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTheme = exports.THEMES = void 0;
 exports.THEMES = {
     PBT_HEAVY_INDUSTRY: {
         alpha: {
@@ -44,4 +45,5 @@ exports.THEMES = {
         }
     }
 };
-exports.getTheme = function () { return exports.THEMES.OLIVIA_DARK; };
+var getTheme = function () { return exports.THEMES.OLIVIA_DARK; };
+exports.getTheme = getTheme;

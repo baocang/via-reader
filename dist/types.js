@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.KeyColorType = exports.CustomFeatures = exports.KeycodeType = exports.LightingTypeDefinition = exports.LightingValue = void 0;
 var LightingValue;
 (function (LightingValue) {
     LightingValue[LightingValue["BACKLIGHT_USE_SPLIT_BACKSPACE"] = 1] = "BACKLIGHT_USE_SPLIT_BACKSPACE";
